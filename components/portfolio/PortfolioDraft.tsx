@@ -356,6 +356,13 @@ export function PortfolioDraft() {
               {riskLabel.text}
             </Badge>
           </div>
+          <div className="mt-2.5 flex items-center justify-between rounded-lg border border-line bg-surface-soft px-3 py-2.5">
+            <span className="text-[13px] text-muted">Free / Paid mix</span>
+            <span className="num text-[13px] font-semibold text-ink">
+              {holdings.filter((e) => e.sourceType === "Free").length} Free ·{" "}
+              {holdings.filter((e) => e.sourceType === "Paid").length} Paid
+            </span>
+          </div>
         </SectionCard>
 
         <SectionCard title="Risk rules" icon={<IconShield size={16} />}>

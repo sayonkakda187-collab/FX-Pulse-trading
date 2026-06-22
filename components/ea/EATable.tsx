@@ -6,12 +6,7 @@ import { StatusBadge } from "./StatusBadge";
 import { RiskBadge } from "./RiskBadge";
 import { BehaviorFlags } from "./BehaviorFlags";
 import { Badge } from "@/components/ui/Badge";
-import {
-  IconEye,
-  IconSparkChat,
-  IconCompare,
-  IconCheck,
-} from "@/components/ui/icons";
+import { IconEye, IconSparkChat, IconScale } from "@/components/ui/icons";
 import { cn, formatPercent, formatRatio, scoreTone } from "@/lib/utils";
 import { useFXPulse } from "@/context/FXPulseContext";
 import type { EA } from "@/lib/types";
@@ -63,8 +58,7 @@ function IconAction({
 
 export function EATable({ eas }: { eas: EA[] }) {
   const router = useRouter();
-  const { askAI, toggleCompare, isComparing, compareEAIds, selectEA } =
-    useFXPulse();
+  const { askAI, selectEA } = useFXPulse();
 
   return (
     <div className="scroll-area overflow-x-auto rounded-card border border-line bg-surface shadow-card">
@@ -85,8 +79,6 @@ export function EATable({ eas }: { eas: EA[] }) {
         </thead>
         <tbody>
           {eas.map((ea) => {
-            const comparing = isComparing(ea.id);
-            const compareFull = compareEAIds.length >= 4 && !comparing;
             return (
               <tr
                 key={ea.id}
@@ -163,16 +155,10 @@ export function EATable({ eas }: { eas: EA[] }) {
                       <IconSparkChat size={15} />
                     </IconAction>
                     <IconAction
-                      label={
-                        comparing
-                          ? `Remove ${ea.name} from compare`
-                          : `Add ${ea.name} to compare`
-                      }
-                      onClick={() => toggleCompare(ea.id)}
-                      active={comparing}
-                      disabled={compareFull}
+                      label={`Compare ${ea.name}`}
+                      onClick={() => router.push("/compare")}
                     >
-                      {comparing ? <IconCheck size={15} /> : <IconCompare size={15} />}
+                      <IconScale size={15} />
                     </IconAction>
                   </div>
                 </td>

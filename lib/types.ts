@@ -2,6 +2,10 @@
 
 export type Platform = "MT4" | "MT5";
 
+export type SourceType = "Free" | "Paid";
+
+export type TrustLevel = "Low" | "Medium" | "High";
+
 export type EAStatus =
   | "Approved"
   | "Testing"
@@ -41,6 +45,25 @@ export interface EA {
   pairList: string[];
   timeframe: string;
   status: EAStatus;
+
+  /** Free (community / open) vs Paid (vendor) EA. */
+  sourceType: SourceType;
+  /** 0–100 — quality relative to its cost (Paid) or transparency/safety (Free). */
+  valueScore: number;
+
+  // Paid-EA commercial fields
+  price?: number;
+  license?: string;
+  vendorTrust?: TrustLevel;
+  support?: "None" | "Email" | "Priority";
+  updates?: "Stale" | "Occasional" | "Active";
+
+  // Free-EA security-review fields
+  openSource?: boolean;
+  codeAvailable?: boolean;
+  usesDLL?: boolean;
+  usesWebRequest?: boolean;
+  securityVerdict?: string;
 
   qualityScore: number;
   winRate: number;

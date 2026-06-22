@@ -1,15 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button, comingSoon } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { StatusBadge } from "./StatusBadge";
+import { SourceBadge } from "./SourceBadge";
 import { QualityScoreRing } from "./QualityScoreRing";
 import {
   IconArrowLeft,
   IconSparkChat,
-  IconCompare,
+  IconScale,
   IconPortfolio,
   IconCheck,
   IconChevronDown,
@@ -18,17 +20,9 @@ import { useFXPulse } from "@/context/FXPulseContext";
 import type { EA } from "@/lib/types";
 
 export function EADetailHeader({ ea }: { ea: EA }) {
-  const {
-    askAI,
-    toggleCompare,
-    isComparing,
-    compareEAIds,
-    addToPortfolioDraft,
-    isInPortfolio,
-  } = useFXPulse();
+  const router = useRouter();
+  const { askAI, addToPortfolioDraft, isInPortfolio } = useFXPulse();
 
-  const comparing = isComparing(ea.id);
-  const compareFull = compareEAIds.length >= 4 && !comparing;
   const inPortfolio = isInPortfolio(ea.id);
 
   const handleAddPortfolio = () => {
@@ -62,6 +56,13 @@ export function EADetailHeader({ ea }: { ea: EA }) {
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <StatusBadge status={ea.status} />
+            <SourceBadge source={ea.sourceType} />
+            <Badge tone="neutral" size="sm">
+              {ea.platform}
+            </Badge>
+            <Badge tone="primary" size="sm">
+              Value {ea.valueScore}
+            </Badge>
             <button
               type="button"
               onClick={() => comingSoon("Changing EA status")}
@@ -71,9 +72,6 @@ export function EADetailHeader({ ea }: { ea: EA }) {
               Change status
               <IconChevronDown size={13} />
             </button>
-            <Badge tone="neutral" size="sm">
-              {ea.platform}
-            </Badge>
           </div>
           <h1 className="mt-2.5 text-2xl font-bold text-ink">{ea.name}</h1>
           <p className="mt-1 text-sm text-muted">
@@ -105,13 +103,11 @@ export function EADetailHeader({ ea }: { ea: EA }) {
               Ask AI
             </Button>
             <Button
-              variant={comparing ? "subtle" : "secondary"}
-              leftIcon={comparing ? <IconCheck size={16} /> : <IconCompare size={16} />}
-              onClick={() => toggleCompare(ea.id)}
-              disabled={compareFull}
-              aria-pressed={comparing}
+              variant="secondary"
+              leftIcon={<IconScale size={16} />}
+              onClick={() => router.push("/compare")}
             >
-              {comparing ? "In Compare" : "Add to Compare"}
+              Compare Free/Paid
             </Button>
             <Button
               variant={inPortfolio ? "subtle" : "secondary"}

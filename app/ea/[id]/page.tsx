@@ -15,6 +15,8 @@ import { EquityDrawdownChartSvg } from "@/components/charts/EquityDrawdownChartS
 import {
   IconActivity,
   IconShieldAlert,
+  IconShield,
+  IconTag,
   IconLibrary,
   IconCheck,
   IconAlert,
@@ -239,6 +241,38 @@ export default function EADetailPage() {
           </dl>
         </SectionCard>
       </div>
+
+      {/* Source / vendor info */}
+      {ea.sourceType === "Paid" ? (
+        <SectionCard title="Vendor information" icon={<IconTag size={16} />}>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+            <Metric label="Price" value={ea.price != null ? formatMoney(ea.price) : "—"} />
+            <Metric label="License" value={ea.license ?? "—"} />
+            <Metric
+              label="Vendor Trust"
+              value={ea.vendorTrust ?? "—"}
+              tone={ea.vendorTrust === "High" ? "success" : ea.vendorTrust === "Low" ? "danger" : "warning"}
+            />
+            <Metric label="Support" value={ea.support ?? "—"} tone={ea.support === "None" ? "danger" : undefined} />
+            <Metric label="Updates" value={ea.updates ?? "—"} tone={ea.updates === "Stale" ? "danger" : ea.updates === "Active" ? "success" : "warning"} />
+          </div>
+          <p className="mt-3 text-[13px] text-muted">
+            Paid is not automatically better — the price has to be justified by evidence and risk control.
+          </p>
+        </SectionCard>
+      ) : (
+        <SectionCard title="Source &amp; security" icon={<IconShield size={16} />}>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <Metric label="Open Source" value={ea.openSource ? "Yes" : "No"} tone={ea.openSource ? "success" : "warning"} />
+            <Metric label="Code Available" value={ea.codeAvailable ? "Yes" : "No"} tone={ea.codeAvailable ? "success" : "warning"} />
+            <Metric label="Uses DLL" value={ea.usesDLL ? "Yes" : "No"} tone={ea.usesDLL ? "danger" : "success"} />
+            <Metric label="Web Requests" value={ea.usesWebRequest ? "Yes" : "No"} tone={ea.usesWebRequest ? "warning" : "success"} />
+          </div>
+          {ea.securityVerdict ? (
+            <p className="mt-3 text-[13px] text-muted">{ea.securityVerdict}</p>
+          ) : null}
+        </SectionCard>
+      )}
 
       {/* AI verdict */}
       <div>

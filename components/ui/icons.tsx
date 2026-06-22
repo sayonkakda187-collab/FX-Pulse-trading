@@ -213,3 +213,77 @@ export const IconSparkChat = (p: IconProps) => (
     <path d="M12 8l.9 2.1L15 11l-2.1.9L12 14l-.9-2.1L9 11l2.1-.9z" />
   </Base>
 );
+
+export const IconFlask = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M9 3h6M10 3v6l-5.2 9A2 2 0 0 0 6.6 21h10.8a2 2 0 0 0 1.8-3L14 9V3" />
+    <path d="M7.5 14h9" />
+  </Base>
+);
+
+export const IconTag = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M20.6 13.4 12 22l-9-9V3h10l7.6 7.6a2 2 0 0 1 0 2.8z" />
+    <circle cx="7.5" cy="7.5" r="1.2" />
+  </Base>
+);
+
+export const IconScale = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M12 3v18M7 21h10M5 7h14M5 7l-3 6a3 3 0 0 0 6 0zM19 7l-3 6a3 3 0 0 0 6 0z" />
+  </Base>
+);
+
+export const IconBell = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+    <path d="M13.7 21a2 2 0 0 1-3.4 0" />
+  </Base>
+);
+
+export const IconCalendar = (p: IconProps) => (
+  <Base {...p}>
+    <rect x="3" y="4.5" width="18" height="16" rx="2" />
+    <path d="M3 9h18M8 2.5v4M16 2.5v4" />
+  </Base>
+);
+
+export const IconExpand = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M8 3H3v5M16 3h5v5M21 16v5h-5M3 16v5h5" />
+  </Base>
+);
+
+export const IconMore = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="12" cy="5" r="1" />
+    <circle cx="12" cy="12" r="1" />
+    <circle cx="12" cy="19" r="1" />
+  </Base>
+);
+
+export const IconThumbUp = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M7 10v11H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1z" />
+    <path d="M7 10l4-7a2 2 0 0 1 2 2v3h5a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.8 21H7" />
+  </Base>
+);
+
+export const IconThumbDown = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M17 14V3h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1z" />
+    <path d="M17 14l-4 7a2 2 0 0 1-2-2v-3H6a2 2 0 0 1-2-2.3l1.2-7A2 2 0 0 1 7.2 3H17" />
+  </Base>
+);
+
+export const IconStar = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17.8 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z" />
+  </Base>
+);
+
+export const IconBookmark = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z" />
+  </Base>
+);

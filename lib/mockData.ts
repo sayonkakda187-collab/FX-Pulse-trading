@@ -81,7 +81,28 @@ function sparkFromEquity(eq: number[], n = 16): number[] {
 /*  EA seeds                                                                  */
 /* -------------------------------------------------------------------------- */
 
-type EASeed = Omit<EA, "equityCurve" | "drawdownCurve" | "sparkline"> & {
+/** Free/Paid, value and vendor/security metadata, merged into each EA. */
+type EAMeta = Pick<EA, "sourceType" | "valueScore"> &
+  Partial<
+    Pick<
+      EA,
+      | "price"
+      | "license"
+      | "vendorTrust"
+      | "support"
+      | "updates"
+      | "openSource"
+      | "codeAvailable"
+      | "usesDLL"
+      | "usesWebRequest"
+      | "securityVerdict"
+    >
+  >;
+
+type EASeed = Omit<
+  EA,
+  "equityCurve" | "drawdownCurve" | "sparkline" | keyof EAMeta
+> & {
   profile: CurveProfile;
 };
 
@@ -617,10 +638,123 @@ const SEEDS: EASeed[] = [
   },
 ];
 
+// Free/Paid + value + vendor/security metadata per EA.
+const META: Record<string, EAMeta> = {
+  "london-breakout": {
+    sourceType: "Paid",
+    valueScore: 78,
+    price: 199,
+    license: "1 account",
+    vendorTrust: "High",
+    support: "Priority",
+    updates: "Active",
+  },
+  "trend-rider-pro": {
+    sourceType: "Paid",
+    valueScore: 75,
+    price: 149,
+    license: "2 accounts",
+    vendorTrust: "Medium",
+    support: "Email",
+    updates: "Occasional",
+  },
+  "gold-momentum": {
+    sourceType: "Paid",
+    valueScore: 64,
+    price: 249,
+    license: "1 account",
+    vendorTrust: "Medium",
+    support: "Email",
+    updates: "Active",
+  },
+  "scalper-xtreme": {
+    sourceType: "Paid",
+    valueScore: 30,
+    price: 299,
+    license: "1 account",
+    vendorTrust: "Low",
+    support: "None",
+    updates: "Stale",
+  },
+  "grid-recovery": {
+    sourceType: "Free",
+    valueScore: 18,
+    openSource: true,
+    codeAvailable: true,
+    usesDLL: false,
+    usesWebRequest: true,
+    securityVerdict: "Transparent code, but a dangerous grid/martingale strategy.",
+  },
+  "tokyo-mean-reversion": {
+    sourceType: "Free",
+    valueScore: 70,
+    openSource: true,
+    codeAvailable: true,
+    usesDLL: false,
+    usesWebRequest: false,
+    securityVerdict: "Open source and clean — safe to keep testing.",
+  },
+  "carry-harvest": {
+    sourceType: "Paid",
+    valueScore: 86,
+    price: 179,
+    license: "Unlimited",
+    vendorTrust: "High",
+    support: "Priority",
+    updates: "Active",
+  },
+  "frankfurt-range": {
+    sourceType: "Free",
+    valueScore: 50,
+    openSource: false,
+    codeAvailable: false,
+    usesDLL: true,
+    usesWebRequest: true,
+    securityVerdict: "Closed free EA bundling a DLL — review carefully before testing.",
+  },
+  "sydney-swing": {
+    sourceType: "Free",
+    valueScore: 80,
+    openSource: true,
+    codeAvailable: true,
+    usesDLL: false,
+    usesWebRequest: false,
+    securityVerdict: "Open source, low security risk — gather more data.",
+  },
+  "index-pulse": {
+    sourceType: "Paid",
+    valueScore: 60,
+    price: 129,
+    license: "1 account",
+    vendorTrust: "Medium",
+    support: "Email",
+    updates: "Occasional",
+  },
+  "martingale-master": {
+    sourceType: "Paid",
+    valueScore: 12,
+    price: 349,
+    license: "1 account",
+    vendorTrust: "Low",
+    support: "None",
+    updates: "Stale",
+  },
+  "news-fade": {
+    sourceType: "Free",
+    valueScore: 38,
+    openSource: false,
+    codeAvailable: false,
+    usesDLL: true,
+    usesWebRequest: true,
+    securityVerdict: "Closed free EA making network calls with a DLL — keep quarantined.",
+  },
+};
+
 export const EAS: EA[] = SEEDS.map(({ profile, ...rest }) => {
   const equityCurve = generateEquity(rest.id, profile);
   return {
     ...rest,
+    ...META[rest.id],
     equityCurve,
     drawdownCurve: drawdownFromEquity(equityCurve),
     sparkline: sparkFromEquity(equityCurve),
@@ -644,6 +778,55 @@ export function getEAsByIds(ids: string[]): EA[] {
 
 export const BEST_EA_ID = "london-breakout";
 export const RISKIEST_EA_ID = "grid-recovery";
+export const BEST_FREE_EA_ID = "sydney-swing";
+export const BEST_PAID_EA_ID = "london-breakout";
+export const BEST_VALUE_EA_ID = "carry-harvest";
+export const MOST_DANGEROUS_EA_ID = "grid-recovery";
+
+export function freeEAs(list: EA[] = EAS): EA[] {
+  return list.filter((e) => e.sourceType === "Free");
+}
+export function paidEAs(list: EA[] = EAS): EA[] {
+  return list.filter((e) => e.sourceType === "Paid");
+}
+
+/** Curated vault overview figures shown on the Dashboard + sidebar. */
+export const VAULT_STATS = {
+  total: 30,
+  free: 18,
+  paid: 12,
+  approved: 8,
+  needsReview: 6,
+  highRisk: 7,
+  aiReviewed: 24,
+} as const;
+
+/** Account shown in the top bar. */
+export const USER = {
+  name: "Chan Dara",
+  role: "Admin",
+  initials: "CD",
+};
+
+/** Mock monthly trend for the "EA Quality Overview" chart (avg of vault). */
+export const QUALITY_TREND = [54, 58, 57, 62, 66, 64, 71, 76];
+export const RISK_TREND = [38, 36, 41, 39, 35, 44, 40, 33];
+export const TREND_LABELS = [
+  "Jun 1",
+  "Jun 8",
+  "Jun 15",
+  "Jun 22",
+  "Jun 30",
+];
+
+/** Tiny deterministic sparklines for the KPI cards. */
+export const KPI_SPARKS: Record<string, number[]> = {
+  total: [20, 22, 21, 24, 26, 27, 29, 30],
+  approved: [3, 4, 4, 5, 6, 7, 7, 8],
+  needsReview: [9, 8, 7, 8, 6, 7, 6, 6],
+  highRisk: [4, 5, 6, 6, 7, 6, 7, 7],
+  aiReviewed: [12, 14, 16, 18, 20, 22, 23, 24],
+};
 
 export const STATUS_TABS: Array<EAStatus | "All"> = [
   "All",
@@ -691,8 +874,8 @@ export function computeKPIs(list: EA[] = EAS): VaultKPIs {
 export const ANALYST_PROFILE = {
   name: "Analyst",
   role: "Phase 1 · Research",
-  collectedEAs: 42,
-  aiReviewed: 28,
+  freeEAs: 18,
+  paidEAs: 12,
 };
 
 export const AI_WARNINGS: AIWarning[] = [

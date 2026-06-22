@@ -34,6 +34,9 @@ const config: Config = {
         danger: "var(--danger)",
         "danger-soft": "var(--danger-soft)",
 
+        blue: "var(--blue)",
+        "blue-soft": "var(--blue-soft)",
+
         "neutral-soft": "var(--neutral-soft)",
       },
       fontFamily: {
