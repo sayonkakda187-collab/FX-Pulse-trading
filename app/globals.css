@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #f5f5f8;
+  --surface: #ffffff;
+  --surface-soft: #faf9fc;
+  --line: #edebf3;
+
+  --ink: #1a1b2e;
+  --muted: #6f6d80;
+  --faint: #a3a1b2;
+
+  --sidebar: #1d1e33;
+  --sidebar-deep: #191a2d;
+
+  --primary: #6c5cff;
+  --primary-dark: #5b4ddb;
+  --primary-soft: #f4f2fb;
+
+  --success: #16a34a;
+  --success-soft: #e7f6ee;
+
+  --warning: #c77f0a;
+  --warning-soft: #fdf6e6;
+
+  --danger: #dc2626;
+  --danger-soft: #fdecec;
+
+  --neutral-soft: #f1f5f9;
+
+  --radius-card: 18px;
+  --shadow-card: 0 8px 28px rgba(20, 20, 40, 0.06);
+
+  /* Fonts are injected by next/font in app/layout.tsx */
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+}
+
+@layer base {
+  * {
+    border-color: var(--line);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    letter-spacing: -0.01em;
+  }
+
+  /* Visible, consistent focus ring for keyboard users. */
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  ::selection {
+    background: rgba(108, 92, 255, 0.18);
+    color: var(--ink);
+  }
+}
+
+@layer utilities {
+  /* Tabular monospace numerals for scores, ratios, money, percentages. */
+  .num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+    letter-spacing: -0.01em;
+  }
+
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  /* Hide scrollbars on horizontal chip rows while keeping scroll. */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Soft custom scrollbars in the light workspace. */
+.scroll-area {
+  scrollbar-width: thin;
+  scrollbar-color: #d8d6e4 transparent;
+}
+.scroll-area::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.scroll-area::-webkit-scrollbar-thumb {
+  background: #d8d6e4;
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+.scroll-area::-webkit-scrollbar-thumb:hover {
+  background: #c3c0d6;
+  background-clip: content-box;
+}
+
+/* Allocation range slider (used in the Portfolio Draft). */
+.range-allocation {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--line);
+  outline-offset: 4px;
+}
+.range-allocation::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 3px solid #ffffff;
+  box-shadow: 0 1px 4px rgba(20, 20, 40, 0.25);
+  cursor: pointer;
+}
+.range-allocation::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 3px solid #ffffff;
+  box-shadow: 0 1px 4px rgba(20, 20, 40, 0.25);
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
