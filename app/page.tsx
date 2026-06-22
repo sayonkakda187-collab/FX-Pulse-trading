@@ -127,32 +127,43 @@ export default function DashboardPage() {
   const previewEAs = EAS.slice(0, 6);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <PageScope scope="Vault Overview" />
 
-      <p className="max-w-2xl text-[13.5px] text-muted">
+      <p className="max-w-2xl text-sm leading-relaxed text-muted">
         Your EA vault at a glance — what you have, what is strong, what is
-        dangerous, and what to review first. Win rate is always read alongside
+        dangerous, and what to review next. Win rate is always read alongside
         profit factor and drawdown.
       </p>
 
-      {/* KPIs */}
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
-        <MetricCard label="Total EAs" value={kpis.total} icon={<IconDashboard size={17} />} sub="In workspace" />
-        <MetricCard label="Approved" value={kpis.approved} tone="success" icon={<IconCheck size={17} />} sub="Cleared for testing" />
-        <MetricCard label="Testing" value={kpis.testing} tone="warning" icon={<IconActivity size={17} />} sub="Under evaluation" />
-        <MetricCard label="High-Risk Flagged" value={kpis.highRiskFlagged} tone="danger" icon={<IconAlert size={17} />} sub="Grid / martingale / high DD" />
-        <MetricCard label="AI Reviewed" value={kpis.aiReviewed} tone="primary" icon={<IconSparkChat size={17} />} sub={`of ${kpis.total} EAs`} />
-      </div>
+      {/* What you have */}
+      <section className="space-y-3.5">
+        <BandHeader eyebrow="What you have" title="Vault at a glance" />
+        <div className="grid grid-cols-2 gap-3.5 md:grid-cols-3 xl:grid-cols-5">
+          <MetricCard label="Total EAs" value={kpis.total} icon={<IconDashboard size={17} />} sub="In workspace" />
+          <MetricCard label="Approved" value={kpis.approved} tone="success" icon={<IconCheck size={17} />} sub="Cleared for testing" />
+          <MetricCard label="Testing" value={kpis.testing} tone="warning" icon={<IconActivity size={17} />} sub="Under evaluation" />
+          <MetricCard label="High-Risk Flagged" value={kpis.highRiskFlagged} tone="danger" icon={<IconAlert size={17} />} sub="Grid / martingale / high DD" />
+          <MetricCard label="AI Reviewed" value={kpis.aiReviewed} tone="primary" icon={<IconSparkChat size={17} />} sub={`of ${kpis.total} EAs`} />
+        </div>
+      </section>
 
-      {/* Spotlights */}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <Spotlight label="Best EA" kind="best" ea={best} />
-        <Spotlight label="Riskiest EA" kind="risk" ea={riskiest} />
-      </div>
+      {/* What's good · what's dangerous */}
+      <section className="space-y-3.5">
+        <BandHeader
+          eyebrow="What's good · what's dangerous"
+          title="Spotlights"
+        />
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <Spotlight label="Best EA" kind="best" ea={best} />
+          <Spotlight label="Riskiest EA" kind="risk" ea={riskiest} />
+        </div>
+      </section>
 
-      {/* Warnings + Review queue */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      {/* What to review next */}
+      <section className="space-y-3.5">
+        <BandHeader eyebrow="What to review next" title="Warnings & review queue" />
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <SectionCard
           title="Recent AI Warnings"
           icon={<IconAlert size={16} />}
@@ -217,7 +228,8 @@ export default function DashboardPage() {
             ))}
           </ul>
         </SectionCard>
-      </div>
+        </div>
+      </section>
 
       {/* Library preview */}
       <section>
@@ -241,6 +253,17 @@ export default function DashboardPage() {
         </div>
         <EATable eas={previewEAs} />
       </section>
+    </div>
+  );
+}
+
+function BandHeader({ eyebrow, title }: { eyebrow: string; title: string }) {
+  return (
+    <div>
+      <div className="eyebrow">{eyebrow}</div>
+      <h2 className="mt-0.5 text-lg font-semibold tracking-tight text-ink">
+        {title}
+      </h2>
     </div>
   );
 }

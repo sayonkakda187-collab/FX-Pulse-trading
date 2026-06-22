@@ -161,7 +161,7 @@ export function PortfolioDraft() {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1fr_330px]">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_340px]">
       {/* Main column */}
       <div className="space-y-5">
         <SectionCard
@@ -179,7 +179,7 @@ export function PortfolioDraft() {
               return (
                 <li
                   key={ea.id}
-                  className="rounded-xl border border-line bg-surface-soft p-3"
+                  className="rounded-xl border border-line bg-surface-soft p-3.5"
                 >
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-2.5">

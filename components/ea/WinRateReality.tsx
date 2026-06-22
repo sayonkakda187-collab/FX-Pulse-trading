@@ -41,20 +41,18 @@ function Stat({
   large?: boolean;
 }) {
   return (
-    <div className="rounded-lg border border-line bg-surface-soft px-3 py-2">
-      <div className="text-[11px] font-medium uppercase tracking-wide text-faint">
-        {label}
-      </div>
+    <div className="flex-1 px-3 py-2.5 text-center">
+      <div className="eyebrow">{label}</div>
       <div
         className={cn(
-          "num font-semibold leading-tight",
-          large ? "text-xl" : "text-lg",
+          "num mt-1 font-bold leading-none tracking-tight",
+          large ? "text-[22px]" : "text-lg",
           tone ? TONE_TEXT[tone] : "text-ink",
         )}
       >
         {value}
       </div>
-      {hint ? <div className="text-[11px] text-muted">{hint}</div> : null}
+      {hint ? <div className="mt-1 text-[11px] text-muted">{hint}</div> : null}
     </div>
   );
 }
@@ -86,7 +84,7 @@ export function WinRateReality({
           <Icon size={13} />
           <span>{headline}</span>
         </div>
-        <div className="mt-2 grid grid-cols-3 gap-2">
+        <div className="mt-2 flex items-stretch divide-x divide-line rounded-xl border border-line bg-surface-soft">
           <Stat label="Win Rate" value={formatPercent(ea.winRate, 0)} />
           <Stat
             label="Profit Factor"
@@ -107,38 +105,38 @@ export function WinRateReality({
     <div className={className}>
       <div
         className={cn(
-          "flex items-start gap-2 rounded-xl border px-3.5 py-2.5",
+          "flex items-start gap-2.5 rounded-xl border px-4 py-3",
           TONE_BANNER[tone],
         )}
       >
-        <Icon size={18} />
+        <Icon size={18} className="mt-0.5 shrink-0" />
         <div>
-          <p className="text-sm font-semibold">{headline}</p>
-          <p className="mt-0.5 text-[12px] opacity-80">
+          <p className="text-sm font-semibold leading-snug">{headline}</p>
+          <p className="mt-0.5 text-[12px] leading-snug opacity-80">
             Win rate is never read alone — it is judged against profit factor
             and max drawdown.
           </p>
         </div>
       </div>
-      <div className="mt-3 grid grid-cols-3 gap-2.5">
+      <div className="mt-3 flex items-stretch divide-x divide-line rounded-xl border border-line bg-surface-soft">
         <Stat
           label="Win Rate"
           value={formatPercent(ea.winRate, 0)}
-          hint="Share of winning trades"
+          hint="Share of wins"
           large
         />
         <Stat
           label="Profit Factor"
           value={formatRatio(ea.profitFactor)}
           tone={pfTone(ea.profitFactor)}
-          hint="Gross win ÷ gross loss"
+          hint="Gross win ÷ loss"
           large
         />
         <Stat
           label="Max Drawdown"
           value={formatPercent(ea.maxDrawdown)}
           tone={ddTone(ea.maxDrawdown)}
-          hint="Deepest equity fall"
+          hint="Deepest fall"
           large
         />
       </div>

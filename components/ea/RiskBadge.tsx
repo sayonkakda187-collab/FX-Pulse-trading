@@ -22,12 +22,20 @@ export function RiskBadge({ risk, size = "md", className }: RiskBadgeProps) {
     return (
       <span
         className={cn(
-          "inline-flex items-center gap-1.5 rounded-full border border-transparent bg-danger font-semibold text-white",
-          size === "sm" ? "px-2 py-0.5 text-[11px]" : "px-2.5 py-1 text-xs",
+          "inline-flex items-center gap-1.5 rounded-full border border-transparent bg-danger font-semibold tracking-tight text-white shadow-sm",
+          size === "sm"
+            ? "px-2 py-0.5 text-[11px]"
+            : "px-2.5 py-[3px] text-[11.5px]",
           className,
         )}
       >
-        <span className="h-1.5 w-1.5 rounded-full bg-white" aria-hidden />
+        <span
+          className={cn(
+            "rounded-full bg-white",
+            size === "sm" ? "h-1.5 w-1.5" : "h-[7px] w-[7px]",
+          )}
+          aria-hidden
+        />
         Extreme risk
       </span>
     );

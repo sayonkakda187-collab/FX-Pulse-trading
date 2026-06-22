@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Button, comingSoon } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { StatusBadge } from "./StatusBadge";
 import { QualityScoreRing } from "./QualityScoreRing";
@@ -56,7 +57,8 @@ export function EADetailHeader({ ea }: { ea: EA }) {
         Back to EA Library
       </Link>
 
-      <div className="mt-3 flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+      <Card className="mt-4">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <StatusBadge status={ea.status} />
@@ -85,13 +87,15 @@ export function EADetailHeader({ ea }: { ea: EA }) {
           ) : null}
         </div>
 
-        <div className="flex items-center gap-5">
-          <QualityScoreRing
-            score={ea.qualityScore}
-            size={96}
-            showOutOf
-            caption="Quality Score"
-          />
+        <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:gap-5">
+          <div className="flex justify-center sm:block">
+            <QualityScoreRing
+              score={ea.qualityScore}
+              size={96}
+              showOutOf
+              caption="Quality Score"
+            />
+          </div>
           <div className="flex flex-col gap-2">
             <Button
               variant="primary"
@@ -119,7 +123,8 @@ export function EADetailHeader({ ea }: { ea: EA }) {
             </Button>
           </div>
         </div>
-      </div>
+        </div>
+      </Card>
     </div>
   );
 }

@@ -81,7 +81,7 @@ export default function LibraryPage() {
   );
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <PageScope scope="Vault Overview" />
 
       {/* Search + view toggle */}

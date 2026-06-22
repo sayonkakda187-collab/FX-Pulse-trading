@@ -93,10 +93,10 @@ export default function SettingsPage() {
   const totalWeight = Object.values(weights).reduce((s, v) => s + v, 0);
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <PageScope scope="Vault Overview" />
 
-      <p className="max-w-2xl text-[13.5px] text-muted">
+      <p className="max-w-2xl text-sm leading-relaxed text-muted">
         Configure how FX Pulse scores and flags EAs. Settings are a working
         preview in Phase 1 — changes are not persisted yet.
       </p>

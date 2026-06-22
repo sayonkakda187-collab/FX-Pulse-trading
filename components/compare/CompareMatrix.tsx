@@ -51,7 +51,7 @@ function extremaTone(
 
 function Cell({ tone, children }: { tone: CellTone; children: React.ReactNode }) {
   return (
-    <td className="border-b border-line px-3 py-2.5 text-center align-middle">
+    <td className="border-b border-line px-4 py-3 text-center align-middle">
       <span
         className={cn(
           "num inline-flex min-w-[3.5rem] justify-center rounded-md px-2 py-1 text-[13px]",
@@ -105,10 +105,24 @@ export function CompareMatrix({ eas }: { eas: EA[] }) {
   };
 
   const labelCol =
-    "sticky left-0 z-10 bg-surface border-b border-line px-4 py-2.5 text-left text-[12px] font-semibold uppercase tracking-wide text-faint";
+    "sticky left-0 z-10 border-b border-r border-line bg-surface px-5 py-3 text-left text-[12.5px] font-medium text-muted";
 
   return (
     <div className="overflow-hidden rounded-card border border-line bg-surface shadow-card">
+      {/* Legend */}
+      <div className="flex items-center gap-4 border-b border-line px-5 py-2.5 text-[12px] text-muted">
+        <span className="inline-flex items-center gap-1.5">
+          <span className="h-3 w-3 rounded bg-success-soft ring-1 ring-inset ring-[#cdebd9]" />
+          Best value
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="h-3 w-3 rounded bg-danger-soft ring-1 ring-inset ring-[#f6d3d3]" />
+          Worst value
+        </span>
+        <span className="ml-auto hidden text-faint md:block">
+          Win rate alone can favour the most dangerous EA — read every row.
+        </span>
+      </div>
       <div className="scroll-area overflow-x-auto">
         <table className="w-full border-collapse text-sm">
           <thead>
@@ -117,7 +131,7 @@ export function CompareMatrix({ eas }: { eas: EA[] }) {
               {eas.map((ea) => (
                 <th
                   key={ea.id}
-                  className="border-b border-line px-3 py-3 text-center align-bottom"
+                  className="border-b border-line px-4 py-4 text-center align-bottom"
                 >
                   <div className="flex flex-col items-center gap-1.5">
                     <div className="flex items-center gap-1.5">
@@ -147,7 +161,7 @@ export function CompareMatrix({ eas }: { eas: EA[] }) {
             <tr>
               <th scope="row" className={labelCol}>Status</th>
               {eas.map((ea, i) => (
-                <td key={ea.id} className="border-b border-line px-3 py-2.5 text-center">
+                <td key={ea.id} className="border-b border-line px-4 py-3 text-center">
                   <span
                     className={cn(
                       "inline-block rounded-md px-1.5 py-1",
@@ -217,7 +231,7 @@ export function CompareMatrix({ eas }: { eas: EA[] }) {
             <tr>
               <th scope="row" className={labelCol}>Risk Type</th>
               {eas.map((ea, i) => (
-                <td key={ea.id} className="border-b border-line px-3 py-2.5 text-center">
+                <td key={ea.id} className="border-b border-line px-4 py-3 text-center">
                   <span
                     className={cn(
                       "inline-block rounded-md px-1.5 py-1",
@@ -267,7 +281,7 @@ export function CompareMatrix({ eas }: { eas: EA[] }) {
                 return (
                   <td
                     key={ea.id}
-                    className="border-b border-line px-3 py-2.5 text-center align-top"
+                    className="border-b border-line px-4 py-3 text-center align-top"
                   >
                     <span
                       className={cn(

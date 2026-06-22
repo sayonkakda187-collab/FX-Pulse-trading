@@ -73,10 +73,10 @@ function PanelContent() {
   return (
     <div className="flex h-full flex-col bg-surface">
       {/* Header */}
-      <div className="border-b border-line px-4 py-3.5">
+      <div className="border-b border-line px-5 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-white">
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-white shadow-sm">
               <IconAssistant size={16} />
             </span>
             <span className="text-[14px] font-bold text-ink">AI Assistant</span>
@@ -90,14 +90,17 @@ function PanelContent() {
             <IconClose size={16} />
           </button>
         </div>
-        <div className="mt-2.5 flex items-center gap-1.5 rounded-lg bg-primary-soft px-2.5 py-1.5 text-[12px] font-medium text-primary-dark">
-          <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden />
-          {scopeLabel}
+        <div className="mt-3">
+          <div className="eyebrow mb-1">Scope</div>
+          <div className="flex items-center gap-1.5 rounded-lg bg-primary-soft px-2.5 py-1.5 text-[12.5px] font-semibold text-primary-dark">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden />
+            {scopeLabel}
+          </div>
         </div>
       </div>
 
       {/* Body */}
-      <div className="scroll-area flex-1 space-y-3.5 overflow-y-auto px-4 py-4">
+      <div className="scroll-area flex-1 space-y-4 overflow-y-auto px-5 py-4">
         {activeAIContext === "EA" && ea ? (
           <div className="rounded-card border border-line bg-surface-soft p-3">
             <div className="flex items-center justify-between gap-2">
@@ -157,18 +160,18 @@ function PanelContent() {
       </div>
 
       {/* Footer: suggested questions + input */}
-      <div className="border-t border-line px-4 py-3">
-        <div className="mb-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-faint">
+      <div className="border-t border-line px-5 py-4">
+        <div className="eyebrow mb-2 flex items-center gap-1.5">
           <IconSparkChat size={13} />
           Suggested questions
         </div>
-        <div className="no-scrollbar mb-3 flex flex-wrap gap-1.5">
-          {SUGGESTED_QUESTIONS.slice(0, 4).map((q) => (
+        <div className="mb-3 flex flex-col gap-1.5">
+          {SUGGESTED_QUESTIONS.slice(0, 3).map((q) => (
             <button
               key={q}
               type="button"
               onClick={() => sendMessage(q)}
-              className="rounded-full border border-line bg-surface-soft px-2.5 py-1 text-left text-[12px] text-ink transition-colors hover:border-primary hover:text-primary-dark"
+              className="rounded-lg border border-line bg-surface-soft px-3 py-2 text-left text-[12.5px] text-ink transition-colors hover:border-primary hover:bg-primary-soft hover:text-primary-dark"
             >
               {q}
             </button>

@@ -30,7 +30,7 @@ const STATUS: Record<EAStatus, StatusStyle> = {
   },
   Rejected: {
     label: "Rejected",
-    className: "bg-danger text-white border-transparent",
+    className: "bg-danger text-white border-transparent shadow-sm",
     dot: "bg-white",
   },
   New: {
@@ -51,13 +51,22 @@ export function StatusBadge({ status, size = "md", className }: StatusBadgeProps
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border font-semibold",
-        size === "sm" ? "px-2 py-0.5 text-[11px]" : "px-2.5 py-1 text-xs",
+        "inline-flex items-center gap-1.5 rounded-full border font-semibold tracking-tight",
+        size === "sm"
+          ? "px-2 py-0.5 text-[11px]"
+          : "px-2.5 py-[3px] text-[11.5px]",
         s.className,
         className,
       )}
     >
-      <span className={cn("h-1.5 w-1.5 rounded-full", s.dot)} aria-hidden />
+      <span
+        className={cn(
+          "rounded-full",
+          size === "sm" ? "h-1.5 w-1.5" : "h-[7px] w-[7px]",
+          s.dot,
+        )}
+        aria-hidden
+      />
       {s.label}
     </span>
   );

@@ -16,10 +16,10 @@ export default function ComparePage() {
   const full = compareEAIds.length >= 4;
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <PageScope scope="Compare" />
 
-      <p className="max-w-2xl text-[13.5px] text-muted">
+      <p className="max-w-2xl text-sm leading-relaxed text-muted">
         Compare 2–4 EAs side by side. Best values are highlighted green, worst in
         red — watch how the highest win rate can still lose on profit factor,
         drawdown and behaviour.

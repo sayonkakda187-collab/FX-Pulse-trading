@@ -70,17 +70,17 @@ export function EATable({ eas }: { eas: EA[] }) {
     <div className="scroll-area overflow-x-auto rounded-card border border-line bg-surface shadow-card">
       <table className="w-full min-w-[940px] border-collapse text-sm">
         <thead>
-          <tr className="border-b border-line text-left text-[11px] uppercase tracking-wide text-faint">
-            <th scope="col" className="px-4 py-3 font-semibold">Status</th>
-            <th scope="col" className="px-4 py-3 font-semibold">Name</th>
-            <th scope="col" className="px-4 py-3 font-semibold">Platform</th>
-            <th scope="col" className="px-4 py-3 text-right font-semibold">Score</th>
-            <th scope="col" className="px-4 py-3 text-right font-semibold">Win&nbsp;%</th>
-            <th scope="col" className="px-4 py-3 text-right font-semibold">Profit&nbsp;Factor</th>
-            <th scope="col" className="px-4 py-3 text-right font-semibold">Max&nbsp;DD</th>
-            <th scope="col" className="px-4 py-3 font-semibold">Risk</th>
-            <th scope="col" className="px-4 py-3 font-semibold">Flags</th>
-            <th scope="col" className="px-4 py-3 text-right font-semibold">Actions</th>
+          <tr className="border-b border-line bg-surface-soft text-left text-[11px] font-semibold uppercase tracking-[0.05em] text-faint">
+            <th scope="col" className="px-5 py-3.5 font-semibold">Status</th>
+            <th scope="col" className="px-5 py-3.5 font-semibold">Name</th>
+            <th scope="col" className="px-5 py-3.5 font-semibold">Platform</th>
+            <th scope="col" className="px-5 py-3.5 text-right font-semibold">Score</th>
+            <th scope="col" className="px-5 py-3.5 text-right font-semibold">Win&nbsp;%</th>
+            <th scope="col" className="px-5 py-3.5 text-right font-semibold">Profit&nbsp;Factor</th>
+            <th scope="col" className="px-5 py-3.5 text-right font-semibold">Max&nbsp;DD</th>
+            <th scope="col" className="px-5 py-3.5 font-semibold">Risk</th>
+            <th scope="col" className="px-5 py-3.5 font-semibold">Flags</th>
+            <th scope="col" className="px-5 py-3.5 text-right font-semibold">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -92,10 +92,10 @@ export function EATable({ eas }: { eas: EA[] }) {
                 key={ea.id}
                 className="border-b border-line last:border-0 hover:bg-surface-soft"
               >
-                <td className="px-4 py-3">
+                <td className="px-5 py-3.5">
                   <StatusBadge status={ea.status} size="sm" />
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-5 py-3.5">
                   <Link
                     href={`/ea/${ea.id}`}
                     onClick={() => selectEA(ea.id)}
@@ -107,25 +107,25 @@ export function EATable({ eas }: { eas: EA[] }) {
                     {ea.strategy} · {ea.timeframe}
                   </div>
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-5 py-3.5">
                   <Badge tone="neutral" size="sm">
                     {ea.platform}
                   </Badge>
                 </td>
                 <td
                   className={cn(
-                    "num px-4 py-3 text-right font-semibold",
+                    "num px-5 py-3.5 text-right text-[15px] font-bold",
                     SCORE_TEXT[scoreTone(ea.qualityScore)],
                   )}
                 >
                   {ea.qualityScore}
                 </td>
-                <td className="num px-4 py-3 text-right text-ink">
+                <td className="num px-5 py-3.5 text-right text-ink">
                   {formatPercent(ea.winRate, 0)}
                 </td>
                 <td
                   className={cn(
-                    "num px-4 py-3 text-right font-semibold",
+                    "num px-5 py-3.5 text-right font-semibold",
                     SCORE_TEXT[pfTone(ea.profitFactor)],
                   )}
                 >
@@ -133,19 +133,19 @@ export function EATable({ eas }: { eas: EA[] }) {
                 </td>
                 <td
                   className={cn(
-                    "num px-4 py-3 text-right font-semibold",
+                    "num px-5 py-3.5 text-right font-semibold",
                     SCORE_TEXT[ddTone(ea.maxDrawdown)],
                   )}
                 >
                   {formatPercent(ea.maxDrawdown)}
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-5 py-3.5">
                   <RiskBadge risk={ea.riskType} size="sm" />
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-5 py-3.5">
                   <BehaviorFlags ea={ea} size="sm" />
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-5 py-3.5">
                   <div className="flex items-center justify-end gap-1.5">
                     <IconAction
                       label={`View ${ea.name}`}
