@@ -37,8 +37,8 @@ export default function AssistantPage() {
   };
 
   return (
-    <div className="space-y-4">
-      <p className="max-w-2xl text-[13.5px] text-muted">
+    <div className="space-y-5">
+      <p className="max-w-2xl text-sm leading-relaxed text-muted">
         Ask the assistant about your vault, a specific EA, a comparison, or your
         portfolio draft. Answers are structured and risk-first — and are mock
         analysis only, not financial advice.

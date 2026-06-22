@@ -89,7 +89,7 @@ export default function EADetailPage() {
     ea.forwardTestResult > 0;
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <EADetailHeader ea={ea} />
 
       {/* Reality check */}

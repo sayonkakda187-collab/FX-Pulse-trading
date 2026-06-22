@@ -27,30 +27,31 @@ export function EACard({ ea }: { ea: EA }) {
   };
 
   return (
-    <Card className="flex h-full flex-col gap-3.5 transition-shadow hover:shadow-[0_10px_34px_rgba(20,20,40,0.1)]">
+    <Card className="flex h-full flex-col gap-4 transition-shadow duration-200 hover:shadow-pop">
       <div className="flex items-start justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-1.5">
-          <StatusBadge status={ea.status} size="sm" />
-          <Badge tone="neutral" size="sm">
-            {ea.platform}
-          </Badge>
+        <div className="min-w-0 space-y-2">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <StatusBadge status={ea.status} size="sm" />
+            <Badge tone="neutral" size="sm">
+              {ea.platform}
+            </Badge>
+          </div>
+          <div>
+            <h3 className="text-base font-semibold leading-snug text-ink">
+              <Link
+                href={`/ea/${ea.id}`}
+                onClick={() => selectEA(ea.id)}
+                className="rounded-sm hover:text-primary-dark hover:underline"
+              >
+                {ea.name}
+              </Link>
+            </h3>
+            <p className="mt-0.5 text-[12.5px] text-muted">
+              {ea.strategy} · {ea.pairs} · {ea.timeframe}
+            </p>
+          </div>
         </div>
-        <QualityScoreRing score={ea.qualityScore} size={52} />
-      </div>
-
-      <div>
-        <h3 className="text-[15px] font-semibold leading-tight text-ink">
-          <Link
-            href={`/ea/${ea.id}`}
-            onClick={() => selectEA(ea.id)}
-            className="rounded-sm hover:text-primary-dark hover:underline"
-          >
-            {ea.name}
-          </Link>
-        </h3>
-        <p className="mt-1 text-[12.5px] text-muted">
-          {ea.strategy} · {ea.pairs} · {ea.timeframe}
-        </p>
+        <QualityScoreRing score={ea.qualityScore} size={56} />
       </div>
 
       <WinRateReality ea={ea} variant="card" />
@@ -60,7 +61,7 @@ export function EACard({ ea }: { ea: EA }) {
         <BehaviorFlags ea={ea} size="sm" />
       </div>
 
-      <div className="mt-auto flex items-center gap-2 pt-1">
+      <div className="mt-auto flex items-center gap-2 border-t border-line pt-4">
         <Button
           size="sm"
           variant="secondary"

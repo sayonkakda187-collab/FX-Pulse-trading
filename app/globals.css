@@ -31,7 +31,10 @@
   --neutral-soft: #f1f5f9;
 
   --radius-card: 18px;
-  --shadow-card: 0 8px 28px rgba(20, 20, 40, 0.06);
+  /* Soft, layered elevation scale for a premium, low-contrast surface feel. */
+  --shadow-sm: 0 1px 2px rgba(20, 20, 40, 0.05);
+  --shadow-card: 0 6px 24px rgba(20, 20, 40, 0.05);
+  --shadow-pop: 0 16px 44px rgba(20, 20, 40, 0.1);
 
   /* Fonts are injected by next/font in app/layout.tsx */
   --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
@@ -51,7 +54,10 @@
     background-color: var(--bg);
     color: var(--ink);
     font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.55;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
 
@@ -59,7 +65,8 @@
   h2,
   h3,
   h4 {
-    letter-spacing: -0.01em;
+    letter-spacing: -0.018em;
+    line-height: 1.25;
   }
 
   /* Visible, consistent focus ring for keyboard users. */
@@ -87,6 +94,15 @@
   .tnum {
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum" 1;
+  }
+
+  /* Consistent small uppercase section/eyebrow label. */
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--faint);
   }
 
   /* Hide scrollbars on horizontal chip rows while keeping scroll. */

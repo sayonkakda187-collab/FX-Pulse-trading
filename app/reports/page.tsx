@@ -84,7 +84,7 @@ export default function ReportsPage() {
     <div className="space-y-6">
       <PageScope scope="Vault Overview" />
 
-      <p className="max-w-2xl text-[13.5px] text-muted">
+      <p className="max-w-2xl text-sm leading-relaxed text-muted">
         Generate and export review documentation. Export actions are visual in
         Phase 1 — no files are produced yet.
       </p>

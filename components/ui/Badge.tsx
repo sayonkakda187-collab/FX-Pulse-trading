@@ -39,15 +39,21 @@ export function Badge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border font-semibold",
-        size === "sm" ? "px-2 py-0.5 text-[11px]" : "px-2.5 py-1 text-xs",
+        "inline-flex items-center gap-1.5 rounded-full border font-semibold tracking-tight",
+        size === "sm"
+          ? "px-2 py-0.5 text-[11px]"
+          : "px-2.5 py-[3px] text-[11.5px]",
         TONES[tone],
         className,
       )}
     >
       {dot ? (
         <span
-          className={cn("h-1.5 w-1.5 rounded-full", DOT[tone])}
+          className={cn(
+            "rounded-full",
+            size === "sm" ? "h-1.5 w-1.5" : "h-[7px] w-[7px]",
+            DOT[tone],
+          )}
           aria-hidden
         />
       ) : null}

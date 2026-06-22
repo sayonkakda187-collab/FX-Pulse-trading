@@ -25,12 +25,12 @@ export function QualityScoreRing({
 }: QualityScoreRingProps) {
   const tone = scoreTone(score);
   const color = TONE_COLOR[tone];
-  const sw = stroke ?? Math.max(5, Math.round(size * 0.1));
+  const sw = stroke ?? Math.max(4, Math.round(size * 0.092));
   const r = (size - sw) / 2;
   const circumference = 2 * Math.PI * r;
   const pct = clamp(score, 0, 100) / 100;
   const offset = circumference * (1 - pct);
-  const scoreFont = Math.round(size * (showOutOf ? 0.3 : 0.34));
+  const scoreFont = Math.round(size * (showOutOf ? 0.32 : 0.37));
 
   return (
     <figure className="inline-flex flex-col items-center gap-1.5">
@@ -47,7 +47,7 @@ export function QualityScoreRing({
             cy={size / 2}
             r={r}
             fill="none"
-            stroke="var(--line)"
+            stroke="var(--neutral-soft)"
             strokeWidth={sw}
           />
           <circle
@@ -61,6 +61,7 @@ export function QualityScoreRing({
             strokeDasharray={circumference}
             strokeDashoffset={offset}
             transform={`rotate(-90 ${size / 2} ${size / 2})`}
+            style={{ transition: "stroke-dashoffset 600ms ease" }}
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -80,11 +81,7 @@ export function QualityScoreRing({
           ) : null}
         </div>
       </div>
-      {caption ? (
-        <figcaption className="text-[11px] font-medium uppercase tracking-wide text-faint">
-          {caption}
-        </figcaption>
-      ) : null}
+      {caption ? <figcaption className="eyebrow">{caption}</figcaption> : null}
     </figure>
   );
 }

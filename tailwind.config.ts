@@ -44,7 +44,9 @@ const config: Config = {
         card: "var(--radius-card)",
       },
       boxShadow: {
+        sm: "var(--shadow-sm)",
         card: "var(--shadow-card)",
+        pop: "var(--shadow-pop)",
       },
       maxWidth: {
         workspace: "1180px",

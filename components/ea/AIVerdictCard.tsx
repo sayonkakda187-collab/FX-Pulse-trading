@@ -64,11 +64,9 @@ export function AIVerdictCard({
       </p>
 
       {/* Evidence chips */}
-      <div className="mt-3">
-        <p className="text-[11px] font-semibold uppercase tracking-wide text-faint">
-          Evidence
-        </p>
-        <ul className="mt-1.5 flex flex-wrap gap-1.5">
+      <div className="mt-3.5">
+        <p className="eyebrow">Evidence</p>
+        <ul className="mt-2 flex flex-wrap gap-1.5">
           {verdict.evidence.map((e, i) => (
             <li
               key={i}
@@ -92,11 +90,9 @@ export function AIVerdictCard({
 
       {/* Reason */}
       {verdict.reason ? (
-        <div className="mt-2.5">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-faint">
-            Reason
-          </p>
-          <p className="mt-0.5 text-[12px] leading-snug text-muted">
+        <div className="mt-3">
+          <p className="eyebrow">Reason</p>
+          <p className="mt-1 text-[12px] leading-snug text-muted">
             {verdict.reason}
           </p>
         </div>
