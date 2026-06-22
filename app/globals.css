@@ -36,7 +36,7 @@
   --shadow-card: 0 6px 24px rgba(20, 20, 40, 0.05);
   --shadow-pop: 0 16px 44px rgba(20, 20, 40, 0.1);
 
-  /* Fonts are injected by next/font in app/layout.tsx */
+  /* Font families (loaded at runtime in app/layout.tsx) with system fallbacks. */
   --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
 }
