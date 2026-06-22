@@ -1,102 +1,106 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
-import { Button, comingSoon } from "@/components/ui/Button";
-import { IconSearch, IconPlus, IconPanel, IconList } from "@/components/ui/icons";
+import { usePathname } from "next/navigation";
+import { comingSoon } from "@/components/ui/Button";
+import {
+  IconList,
+  IconCalendar,
+  IconBell,
+  IconPanel,
+  IconChevronDown,
+} from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { useFXPulse } from "@/context/FXPulseContext";
-import { getEAById } from "@/lib/mockData";
+import { getEAById, USER } from "@/lib/mockData";
 
-interface RouteMeta {
-  title: string;
-  crumb: string;
-}
-
-const ROUTE_META: Record<string, RouteMeta> = {
-  "/": { title: "Dashboard", crumb: "Overview" },
-  "/library": { title: "EA Library", crumb: "Vault" },
-  "/compare": { title: "Compare EAs", crumb: "Analysis" },
-  "/portfolio": { title: "Portfolio Draft", crumb: "Planning" },
-  "/assistant": { title: "AI Assistant", crumb: "Analysis" },
-  "/reports": { title: "Reports", crumb: "Workspace" },
-  "/settings": { title: "Settings", crumb: "Workspace" },
+const ROUTE_META: Record<string, { title: string; subtitle: string }> = {
+  "/": { title: "Dashboard", subtitle: `Welcome back, ${USER.name} 👋` },
+  "/library": { title: "EA Library", subtitle: "Browse and filter every collected EA." },
+  "/free-lab": { title: "Free EA Lab", subtitle: "Security review of free & open-source EAs." },
+  "/paid-lab": { title: "Paid EA Lab", subtitle: "Vendor value review of paid EAs." },
+  "/compare": { title: "Compare Free/Paid", subtitle: "Free vs paid, side by side." },
+  "/portfolio": { title: "Portfolio Draft", subtitle: "Plan a research portfolio — not live." },
+  "/assistant": { title: "AI Assistant", subtitle: "Ask about risk, evidence and fit." },
+  "/reports": { title: "Reports", subtitle: "Saved reviews and exports." },
+  "/settings": { title: "Settings", subtitle: "Scoring, thresholds and preferences." },
 };
 
-function metaFor(pathname: string): RouteMeta {
+function metaFor(pathname: string) {
   if (pathname.startsWith("/ea/")) {
-    const id = pathname.split("/")[2];
-    const ea = getEAById(id);
-    return { title: ea?.name ?? "EA Detail", crumb: "EA Library" };
+    const ea = getEAById(pathname.split("/")[2]);
+    return { title: ea?.name ?? "EA Detail", subtitle: "EA due-diligence review" };
   }
-  return ROUTE_META[pathname] ?? { title: "FX Pulse", crumb: "Workspace" };
+  return ROUTE_META[pathname] ?? { title: "FX Pulse", subtitle: "EA Intelligence Platform" };
 }
 
 export function TopBar({ onOpenNav }: { onOpenNav: () => void }) {
   const pathname = usePathname();
-  const router = useRouter();
-  const { aiPanelOpen, toggleAIPanel, searchQuery, setSearchQuery } =
-    useFXPulse();
+  const { aiPanelOpen, toggleAIPanel } = useFXPulse();
   const meta = metaFor(pathname);
-
-  const onSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (pathname !== "/library") router.push("/library");
-  };
 
   return (
     <header className="sticky top-0 z-30 border-b border-line bg-surface/85 backdrop-blur-md">
-      <div className="flex items-center gap-3 px-4 py-3 sm:px-6">
+      <div className="flex items-center gap-3 px-4 py-3.5 sm:px-6">
         <button
           type="button"
           onClick={onOpenNav}
           aria-label="Open navigation menu"
-          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-line text-muted hover:bg-surface-soft lg:hidden"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-line text-muted hover:bg-neutral-soft lg:hidden"
         >
           <IconList size={18} />
         </button>
 
         <div className="min-w-0 flex-1">
-          <div className="text-[11px] font-medium uppercase tracking-wide text-faint">
-            FX Pulse · {meta.crumb}
-          </div>
-          <h1 className="truncate text-lg font-bold leading-tight text-ink">
+          <h1 className="truncate text-xl font-bold leading-tight text-ink">
             {meta.title}
           </h1>
+          <p className="truncate text-[13px] text-muted">{meta.subtitle}</p>
         </div>
 
-        <form onSubmit={onSearchSubmit} className="hidden sm:block" role="search">
-          <div className="relative">
-            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-faint">
-              <IconSearch size={16} />
+        {/* Date range pill */}
+        <button
+          type="button"
+          onClick={() => comingSoon("Changing the date range")}
+          className="hidden items-center gap-2 rounded-xl border border-line bg-surface px-3 py-2 text-[13px] font-medium text-muted hover:bg-surface-soft md:inline-flex"
+        >
+          <IconCalendar size={16} />
+          <span className="num">01 Jun 2026 – 30 Jun 2026</span>
+        </button>
+
+        {/* Notifications */}
+        <button
+          type="button"
+          onClick={() => comingSoon("Notifications")}
+          aria-label="Notifications"
+          className="relative inline-flex h-10 w-10 items-center justify-center rounded-xl border border-line text-muted hover:bg-surface-soft"
+        >
+          <IconBell size={18} />
+          <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-danger px-1 text-[10px] font-bold text-white">
+            3
+          </span>
+        </button>
+
+        {/* User */}
+        <button
+          type="button"
+          onClick={() => comingSoon("Account menu")}
+          className="inline-flex items-center gap-2 rounded-xl border border-line bg-surface py-1.5 pl-1.5 pr-2 hover:bg-surface-soft"
+        >
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary-soft text-[11px] font-bold text-primary-dark">
+            {USER.initials}
+          </span>
+          <span className="hidden text-left sm:block">
+            <span className="block text-[12.5px] font-semibold leading-none text-ink">
+              {USER.name}
             </span>
-            <input
-              type="search"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search EAs…"
-              aria-label="Search EAs"
-              className="h-10 w-44 rounded-xl border border-line bg-surface-soft pl-9 pr-3 text-sm text-ink outline-none transition-colors placeholder:text-faint focus:border-primary focus:bg-surface md:w-64"
-            />
-          </div>
-        </form>
+            <span className="block text-[11px] leading-none text-faint">
+              {USER.role}
+            </span>
+          </span>
+          <IconChevronDown size={14} className="hidden text-faint sm:block" />
+        </button>
 
-        <Button
-          variant="primary"
-          leftIcon={<IconPlus size={16} />}
-          onClick={() => comingSoon("Adding an EA")}
-          className="hidden sm:inline-flex"
-        >
-          Add EA
-        </Button>
-        <Button
-          variant="primary"
-          aria-label="Add EA"
-          onClick={() => comingSoon("Adding an EA")}
-          className="sm:hidden"
-        >
-          <IconPlus size={18} />
-        </Button>
-
+        {/* AI panel toggle */}
         <button
           type="button"
           onClick={toggleAIPanel}

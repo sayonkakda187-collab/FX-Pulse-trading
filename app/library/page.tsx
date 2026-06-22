@@ -8,10 +8,21 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { IconSearch, IconGrid, IconList, IconLibrary } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { useFXPulse } from "@/context/FXPulseContext";
-import { EAS, STATUS_TABS } from "@/lib/mockData";
+import { EAS } from "@/lib/mockData";
 import type { EA, EAStatus } from "@/lib/types";
 
-type StatusTab = EAStatus | "All";
+type LibTab = "All" | "Free" | "Paid" | EAStatus;
+
+const TABS: LibTab[] = [
+  "All",
+  "Free",
+  "Paid",
+  "Approved",
+  "Testing",
+  "Watchlist",
+  "Quarantine",
+  "Rejected",
+];
 
 interface Chip {
   key: string;
@@ -31,7 +42,7 @@ const CHIPS: Chip[] = [
 
 export default function LibraryPage() {
   const { searchQuery, setSearchQuery } = useFXPulse();
-  const [tab, setTab] = useState<StatusTab>("All");
+  const [tab, setTab] = useState<LibTab>("All");
   const [active, setActive] = useState<Set<string>>(new Set());
   const [view, setView] = useState<"cards" | "table">("cards");
 
@@ -68,17 +79,23 @@ export default function LibraryPage() {
   }, [searchQuery, active]);
 
   const counts = useMemo(() => {
-    const map: Record<string, number> = { All: baseFiltered.length };
+    const map: Record<string, number> = {
+      All: baseFiltered.length,
+      Free: baseFiltered.filter((e) => e.sourceType === "Free").length,
+      Paid: baseFiltered.filter((e) => e.sourceType === "Paid").length,
+    };
     for (const ea of baseFiltered) {
       map[ea.status] = (map[ea.status] ?? 0) + 1;
     }
     return map;
   }, [baseFiltered]);
 
-  const results = useMemo(
-    () => (tab === "All" ? baseFiltered : baseFiltered.filter((e) => e.status === tab)),
-    [baseFiltered, tab],
-  );
+  const results = useMemo(() => {
+    if (tab === "All") return baseFiltered;
+    if (tab === "Free" || tab === "Paid")
+      return baseFiltered.filter((e) => e.sourceType === tab);
+    return baseFiltered.filter((e) => e.status === tab);
+  }, [baseFiltered, tab]);
 
   return (
     <div className="space-y-6">
@@ -123,7 +140,7 @@ export default function LibraryPage() {
 
       {/* Status tabs */}
       <div className="no-scrollbar -mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1">
-        {STATUS_TABS.map((t) => {
+        {TABS.map((t) => {
           const isActive = tab === t;
           const count = counts[t] ?? 0;
           return (

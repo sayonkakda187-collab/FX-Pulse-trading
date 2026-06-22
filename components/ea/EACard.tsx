@@ -6,20 +6,18 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { StatusBadge } from "./StatusBadge";
+import { SourceBadge } from "./SourceBadge";
 import { RiskBadge } from "./RiskBadge";
 import { BehaviorFlags } from "./BehaviorFlags";
 import { WinRateReality } from "./WinRateReality";
 import { QualityScoreRing } from "./QualityScoreRing";
-import { IconEye, IconCompare, IconCheck, IconSparkChat } from "@/components/ui/icons";
+import { IconEye, IconScale, IconSparkChat } from "@/components/ui/icons";
 import { useFXPulse } from "@/context/FXPulseContext";
 import type { EA } from "@/lib/types";
 
 export function EACard({ ea }: { ea: EA }) {
   const router = useRouter();
-  const { askAI, toggleCompare, isComparing, compareEAIds, selectEA } =
-    useFXPulse();
-  const comparing = isComparing(ea.id);
-  const compareFull = compareEAIds.length >= 4 && !comparing;
+  const { askAI, selectEA } = useFXPulse();
 
   const openDetail = () => {
     selectEA(ea.id);
@@ -32,6 +30,7 @@ export function EACard({ ea }: { ea: EA }) {
         <div className="min-w-0 space-y-2">
           <div className="flex flex-wrap items-center gap-1.5">
             <StatusBadge status={ea.status} size="sm" />
+            <SourceBadge source={ea.sourceType} size="sm" />
             <Badge tone="neutral" size="sm">
               {ea.platform}
             </Badge>
@@ -80,15 +79,12 @@ export function EACard({ ea }: { ea: EA }) {
         </Button>
         <Button
           size="sm"
-          variant={comparing ? "primary" : "ghost"}
-          leftIcon={comparing ? <IconCheck size={15} /> : <IconCompare size={15} />}
-          onClick={() => toggleCompare(ea.id)}
-          disabled={compareFull}
-          aria-pressed={comparing}
+          variant="ghost"
+          leftIcon={<IconScale size={15} />}
+          onClick={() => router.push("/compare")}
           className="ml-auto"
-          title={compareFull ? "Compare holds up to 4 EAs" : undefined}
         >
-          {comparing ? "Comparing" : "Compare"}
+          Compare
         </Button>
       </div>
     </Card>
