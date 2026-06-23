@@ -64,7 +64,7 @@ export function EATable({ eas }: { eas: EA[] }) {
     <div className="scroll-area overflow-x-auto rounded-card border border-line bg-surface shadow-card">
       <table className="w-full min-w-[940px] border-collapse text-sm">
         <thead>
-          <tr className="border-b border-line bg-surface-soft text-left text-[11px] font-semibold uppercase tracking-[0.05em] text-faint">
+          <tr className="border-b border-line bg-surface-soft text-left text-[12px] font-semibold uppercase tracking-[0.04em] text-faint">
             <th scope="col" className="px-5 py-3.5 font-semibold">Status</th>
             <th scope="col" className="px-5 py-3.5 font-semibold">Name</th>
             <th scope="col" className="px-5 py-3.5 font-semibold">Platform</th>

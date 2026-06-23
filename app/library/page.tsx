@@ -99,7 +99,14 @@ export default function LibraryPage() {
 
   return (
     <div className="space-y-6">
-      <PageScope scope="Vault Overview" />
+      <PageScope scope="Library Review" />
+
+      <div>
+        <h2 className="text-lg font-bold tracking-tight text-ink">Browse EAs</h2>
+        <p className="mt-0.5 text-[13px] text-muted">
+          Search, filter and review every collected EA.
+        </p>
+      </div>
 
       {/* Search + view toggle */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">

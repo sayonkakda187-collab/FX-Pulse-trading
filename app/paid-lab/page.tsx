@@ -5,6 +5,7 @@ import { PageScope } from "@/components/shell/PageScope";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { SectionCard } from "@/components/ui/Card";
 import { AIVerdictCard } from "@/components/ea/AIVerdictCard";
+import { LabSpotlight, Checklist } from "@/components/lab/LabCards";
 import { cn, formatMoney, scoreTone } from "@/lib/utils";
 import {
   IconTag,
@@ -44,7 +45,7 @@ export default function PaidLabPage() {
 
   return (
     <div className="space-y-6">
-      <PageScope scope="Vault Overview" />
+      <PageScope scope="Paid EA Value Review" />
 
       <div className="grid grid-cols-2 gap-3.5 md:grid-cols-3 xl:grid-cols-5">
         <KpiCard label="Total Paid EAs" value={list.length} sub="Vendor products" icon={<IconTag size={18} />} />
@@ -63,7 +64,7 @@ export default function PaidLabPage() {
         <div className="scroll-area overflow-x-auto">
           <table className="w-full min-w-[900px] border-collapse text-sm">
             <thead>
-              <tr className="border-y border-line bg-surface-soft text-left text-[11px] font-semibold uppercase tracking-[0.05em] text-faint">
+              <tr className="border-y border-line bg-surface-soft text-left text-[12px] font-semibold uppercase tracking-[0.04em] text-faint">
                 <th className="px-6 py-3">EA</th>
                 <th className="px-3 py-3 text-right">Price</th>
                 <th className="px-3 py-3">License</th>
@@ -111,24 +112,63 @@ export default function PaidLabPage() {
         </div>
       </SectionCard>
 
-      <SectionCard title="AI note" icon={<IconTag size={16} />}>
-        <AIVerdictCard
-          hideHeader
-          verdict={{
-            title: "Paid EA value",
-            summary: "Paid is not automatically better.",
-            evidence: [
-              "A high price does not guarantee risk control or real forward performance",
-              "Vendor trust, support and update cadence matter as much as the strategy",
-              "A paid EA using martingale with no stop loss is poor value at any price",
-            ],
-            risk: "Paying for an EA can anchor you to it despite weak evidence.",
-            reason: "Cost only makes sense when justified by proven, risk-controlled results.",
-            suggestedAction: "Require forward-test evidence and a stop loss before buying or trusting capital.",
-            confidence: "High",
-          }}
+      {/* Paid EA shortlist */}
+      <div>
+        <h2 className="mb-3 text-lg font-bold tracking-tight text-ink">Paid EA shortlist</h2>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <LabSpotlight
+            label="Best Paid Watchlist EA"
+            tone="primary"
+            eaId="gold-momentum"
+            reason="Reasonable quality but news-sensitive — worth watching before any purchase."
+          />
+          <LabSpotlight
+            label="Weak Vendor Evidence"
+            tone="warning"
+            eaId="scalper-xtreme"
+            reason="Low vendor trust, no support and stale updates — evidence does not justify the price."
+          />
+          <LabSpotlight
+            label="High Cost / Low Value EA"
+            tone="danger"
+            eaId="martingale-master"
+            reason="Most expensive yet uses martingale with no stop loss — the worst value in the vault."
+          />
+        </div>
+      </div>
+
+      {/* Checklist + AI note */}
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <Checklist
+          title="Paid EA Value Checklist"
+          items={[
+            "Price justified by evidence",
+            "Vendor trust acceptable",
+            "Forward test available",
+            "Support / update history exists",
+            "No hidden Grid / Martingale",
+            "Drawdown controlled",
+          ]}
         />
-      </SectionCard>
+        <SectionCard title="AI note" icon={<IconTag size={16} />} className="lg:col-span-2">
+          <AIVerdictCard
+            hideHeader
+            verdict={{
+              title: "Paid EA value",
+              summary: "Paid is not automatically better.",
+              evidence: [
+                "A high price does not guarantee risk control or real forward performance",
+                "Vendor trust, support and update cadence matter as much as the strategy",
+                "A paid EA using martingale with no stop loss is poor value at any price",
+              ],
+              risk: "Paying for an EA can anchor you to it despite weak evidence.",
+              reason: "Cost only makes sense when justified by proven, risk-controlled results.",
+              suggestedAction: "Require forward-test evidence and a stop loss before buying or trusting capital.",
+              confidence: "High",
+            }}
+          />
+        </SectionCard>
+      </div>
     </div>
   );
 }

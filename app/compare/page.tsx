@@ -11,7 +11,7 @@ import { RiskBadge } from "@/components/ea/RiskBadge";
 import { QualityScoreRing } from "@/components/ea/QualityScoreRing";
 import { WinRateReality } from "@/components/ea/WinRateReality";
 import { AIVerdictCard } from "@/components/ea/AIVerdictCard";
-import { IconEye, IconCheck, IconScale } from "@/components/ui/icons";
+import { IconEye, IconCheck, IconScale, IconAssistant } from "@/components/ui/icons";
 import { cn, formatMoney, formatPercent, formatRatio } from "@/lib/utils";
 import { useFXPulse } from "@/context/FXPulseContext";
 import {
@@ -35,7 +35,7 @@ function CellText({ tone, children }: { tone: Tone; children: React.ReactNode })
   return (
     <span
       className={cn(
-        "num inline-flex min-w-[3.25rem] justify-center rounded-md px-2 py-1 text-[13px] font-semibold",
+        "num inline-flex min-w-[3.5rem] justify-center rounded-md px-2.5 py-1 text-[13.5px] font-semibold",
         tone === "success"
           ? "bg-success-soft text-success"
           : tone === "danger"
@@ -71,15 +71,34 @@ function Candidate({ ea, kind }: { ea: EA; kind: "Free" | "Paid" }) {
         </div>
       </div>
       <WinRateReality ea={ea} variant="card" />
-      <div className="grid grid-cols-2 gap-2 text-[12.5px]">
+      <div className="grid grid-cols-3 gap-2 text-[12.5px]">
         <div className="rounded-lg border border-line bg-surface-soft px-3 py-2">
-          <div className="text-faint">Value score</div>
+          <div className="text-faint">Value</div>
           <div className="num text-base font-semibold text-ink">{ea.valueScore}</div>
         </div>
         <div className="rounded-lg border border-line bg-surface-soft px-3 py-2">
           <div className="text-faint">Cost</div>
           <div className="num text-base font-semibold text-ink">
             {ea.sourceType === "Free" ? "Free" : formatMoney(ea.price ?? 0)}
+          </div>
+        </div>
+        <div className="rounded-lg border border-line bg-surface-soft px-3 py-2">
+          <div className="text-faint">Portfolio fit</div>
+          <div
+            className={cn(
+              "text-base font-semibold",
+              ea.status === "Approved"
+                ? "text-success"
+                : ea.status === "Rejected" || ea.status === "Quarantine"
+                  ? "text-danger"
+                  : "text-warning",
+            )}
+          >
+            {ea.status === "Approved"
+              ? "Eligible"
+              : ea.status === "Rejected" || ea.status === "Quarantine"
+                ? "Blocked"
+                : "Review"}
           </div>
         </div>
       </div>
@@ -90,6 +109,30 @@ function Candidate({ ea, kind }: { ea: EA; kind: "Free" | "Paid" }) {
         <Button size="sm" variant="subtle" onClick={() => askAI(ea.id)}>Ask AI</Button>
       </div>
     </Card>
+  );
+}
+
+function SumStat({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: string;
+  tone: "success" | "warning" | "blue";
+}) {
+  return (
+    <div className="rounded-xl border border-line bg-surface px-3 py-2.5">
+      <div className="eyebrow">{label}</div>
+      <div
+        className={cn(
+          "mt-0.5 text-[14px] font-bold",
+          tone === "success" ? "text-success" : tone === "blue" ? "text-blue" : "text-warning",
+        )}
+      >
+        {value}
+      </div>
+    </div>
   );
 }
 
@@ -139,7 +182,7 @@ export default function ComparePage() {
 
   return (
     <div className="space-y-6">
-      <PageScope scope="Compare" />
+      <PageScope scope="Free vs Paid Comparison" />
 
       <p className="max-w-2xl text-sm leading-relaxed text-muted">
         Put a free EA next to a paid one. Best values are green, worst are red —
@@ -176,6 +219,29 @@ export default function ComparePage() {
         </div>
       </div>
 
+      {/* AI decision summary */}
+      <div className="rounded-card border border-[#ddd6fe] bg-primary-soft/60 p-5 shadow-card">
+        <div className="flex items-center gap-2">
+          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-white">
+            <IconAssistant size={15} />
+          </span>
+          <h2 className="text-[15px] font-bold text-ink">AI Decision Summary</h2>
+        </div>
+        <p className="mt-2 max-w-3xl text-[13.5px] leading-relaxed text-ink">
+          {p.qualityScore >= f.qualityScore ? "The paid EA" : "The free EA"} has the
+          stronger quality score, while{" "}
+          {f.valueScore >= p.valueScore ? "the free EA" : "the paid EA"} offers better
+          value and transparency. Both should remain in review until forward-test
+          evidence improves.
+        </p>
+        <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
+          <SumStat label="Best Quality" value={p.qualityScore >= f.qualityScore ? "Paid EA" : "Free EA"} tone="success" />
+          <SumStat label="Best Value" value={f.valueScore >= p.valueScore ? "Free EA" : "Paid EA"} tone="success" />
+          <SumStat label="Lowest Transparency Risk" value={f.openSource ? "Free EA" : "Paid EA"} tone="blue" />
+          <SumStat label="Portfolio Status" value="Wait" tone="warning" />
+        </div>
+      </div>
+
       {/* Candidate cards */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <Candidate ea={f} kind="Free" />
@@ -183,22 +249,22 @@ export default function ComparePage() {
       </div>
 
       {/* Decision matrix */}
-      <SectionCard title="Decision matrix" icon={<IconScale size={16} />} bodyClassName="px-0 pb-0 pt-2">
+      <SectionCard title="Decision Matrix" icon={<IconScale size={16} />} bodyClassName="px-0 pb-0 pt-2">
         <div className="scroll-area overflow-x-auto">
           <table className="w-full min-w-[520px] border-collapse text-sm">
             <thead>
-              <tr className="border-y border-line bg-surface-soft text-[11px] font-semibold uppercase tracking-[0.05em] text-faint">
-                <th className="px-6 py-3 text-left">Metric</th>
-                <th className="px-3 py-3 text-center">{f.name}</th>
-                <th className="px-3 py-3 text-center">{p.name}</th>
+              <tr className="border-y border-line bg-surface-soft text-[12px] font-semibold uppercase tracking-[0.04em] text-muted">
+                <th className="px-6 py-3.5 text-left">Metric</th>
+                <th className="px-3 py-3.5 text-center">{f.name}</th>
+                <th className="px-3 py-3.5 text-center">{p.name}</th>
               </tr>
             </thead>
             <tbody>
               {rows.map((r) => (
-                <tr key={r.label} className="border-b border-line last:border-0">
-                  <th scope="row" className="px-6 py-2.5 text-left text-[12.5px] font-medium text-muted">{r.label}</th>
-                  <td className="px-3 py-2.5 text-center">{r.free}</td>
-                  <td className="px-3 py-2.5 text-center">{r.paid}</td>
+                <tr key={r.label} className="border-b border-line last:border-0 hover:bg-surface-soft">
+                  <th scope="row" className="px-6 py-3.5 text-left text-[13px] font-medium text-muted">{r.label}</th>
+                  <td className="px-3 py-3.5 text-center">{r.free}</td>
+                  <td className="px-3 py-3.5 text-center">{r.paid}</td>
                 </tr>
               ))}
             </tbody>
