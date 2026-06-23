@@ -2,9 +2,11 @@
 // Everything here is deterministic so the server and client render identically.
 
 import type {
+  AIScope,
   AIVerdict,
   AIWarning,
   ChatMessage,
+  Confidence,
   EA,
   EAStatus,
   ReviewQueueItem,
@@ -1029,12 +1031,87 @@ export function portfolioVerdict(ids: string[]): AIVerdict {
 }
 
 export const SUGGESTED_QUESTIONS = [
-  "Which EA should I review first?",
+  "Which Free EA is safest?",
+  "Is this paid EA worth buying?",
   "Why is this risky despite high win rate?",
-  "Can this join my portfolio draft?",
-  "Compare with an approved EA",
-  "Which EA should stay in quarantine?",
+  "Can this EA join Portfolio Draft?",
+  "Compare Sydney Swing with London Breakout Pro.",
 ];
+
+/** Context-aware copy for the right AI panel, keyed by scope (route). */
+export interface PanelContext {
+  scope: string;
+  question: string;
+  summary: string;
+  risk: string;
+  suggestedAction: string;
+  confidence: Confidence;
+}
+
+export const AI_CONTEXTS: Record<Exclude<AIScope, "EA">, PanelContext> = {
+  "Vault Overview": {
+    scope: "Vault Overview",
+    question: "Which EA should I review first?",
+    summary: "You have 30 EAs — 7 are high-risk and 6 need review.",
+    risk: "High win-rate EAs can hide weak risk control.",
+    suggestedAction: "Review Grid Recovery EA and News Fade EA first.",
+    confidence: "High",
+  },
+  "Library Review": {
+    scope: "Library Review",
+    question: "Which EAs are risky?",
+    summary:
+      "Your library mixes Free and Paid EAs. Several high-win-rate EAs have weak risk control.",
+    risk: "Win rate alone can disguise grid / martingale and high drawdown.",
+    suggestedAction: "Filter by Quarantine and Rejected first.",
+    confidence: "High",
+  },
+  "Free EA Safety Review": {
+    scope: "Free EA Safety Review",
+    question: "Which free EA is safest?",
+    summary:
+      "Free EAs should be checked for source-code availability, DLL / WebRequest usage, grid, martingale and stop loss.",
+    risk: "A free price tag is not proof of safety.",
+    suggestedAction: "Continue forward testing the open-source EAs.",
+    confidence: "Medium",
+  },
+  "Paid EA Value Review": {
+    scope: "Paid EA Value Review",
+    question: "Is this paid EA worth buying?",
+    summary:
+      "Paid EAs must justify cost with evidence, support, updates and controlled drawdown.",
+    risk: "A high price does not guarantee risk control.",
+    suggestedAction: "Keep weak-evidence paid EAs on Watchlist.",
+    confidence: "Medium",
+  },
+  "Free vs Paid Comparison": {
+    scope: "Free vs Paid Comparison",
+    question: "Free or paid — which is safer?",
+    summary:
+      "The paid EA has stronger quality; the free EA has better transparency and lower cost.",
+    risk: "Choosing on price or win rate alone imports hidden risk.",
+    suggestedAction: "Keep both under review before the Portfolio Draft.",
+    confidence: "Medium",
+  },
+  "Portfolio Draft Review": {
+    scope: "Portfolio Draft Review",
+    question: "Is my draft safe?",
+    summary:
+      "Draft only — no broker connection. Check allocation, correlation, rejected EAs and quarantine warnings.",
+    risk: "Rejected or quarantined EAs can import hidden risk into the draft.",
+    suggestedAction: "Do not add a rejected EA without an explicit override.",
+    confidence: "Medium",
+  },
+  "AI Workspace": {
+    scope: "AI Workspace",
+    question: "What can you help with?",
+    summary:
+      "Ask evidence-based questions about EA quality, hidden risk, paid value, free safety and portfolio readiness.",
+    risk: "Analysis is mock and risk-first — not financial advice.",
+    suggestedAction: "Pick a context and a suggested question to start.",
+    confidence: "High",
+  },
+};
 
 let replyCounter = 0;
 function nextId(): string {
@@ -1165,6 +1242,46 @@ export function getAssistantReply(
       suggestedAction:
         "Keep both in Quarantine and continue demo testing with strict filters.",
       confidence: "Medium",
+    });
+  }
+
+  if (q.includes("safe") || q.includes("safest")) {
+    const target = getEAById("sydney-swing")!;
+    return verdict({
+      title: "Safest free EA",
+      summary: `${target.name} is the safest free EA in the library right now.`,
+      evidence: [
+        "Open source with readable code — no DLL or unknown web requests",
+        `Profit factor ${target.profitFactor.toFixed(2)} with drawdown ${target.maxDrawdown}%`,
+        "Stop loss enforced; no grid or martingale",
+      ],
+      risk: "Free does not mean safe — most free EAs still need forward testing.",
+      reason: "Transparency plus controlled drawdown is what makes a free EA trustworthy.",
+      suggestedAction: "Keep forward testing open-source EAs before trusting capital.",
+      confidence: "Medium",
+    });
+  }
+
+  if (q.includes("worth") || q.includes("buy") || q.includes("paid")) {
+    const target = ea && ea.sourceType === "Paid" ? ea : getEAById("london-breakout")!;
+    const justified =
+      target.qualityScore >= 75 && (target.forwardTestResult ?? 0) > 0;
+    return verdict({
+      title: `Paid value — ${target.name}`,
+      summary: justified
+        ? `${target.name} justifies its cost with evidence.`
+        : `${target.name} does not yet justify its cost.`,
+      evidence: [
+        `Price ${target.price != null ? "$" + target.price : "—"}, value score ${target.valueScore}`,
+        `Quality ${target.qualityScore}, profit factor ${target.profitFactor.toFixed(2)}, drawdown ${target.maxDrawdown}%`,
+        `Vendor trust ${target.vendorTrust ?? "—"}, updates ${target.updates ?? "—"}`,
+      ],
+      risk: "A high price does not guarantee risk control or real forward results.",
+      reason: "Paid is only worth it when cost is matched by proven, controlled performance.",
+      suggestedAction: justified
+        ? "Reasonable to keep testing; require a stop loss before any capital."
+        : "Keep on Watchlist until forward-test evidence improves.",
+      confidence: justified ? "High" : "Medium",
     });
   }
 

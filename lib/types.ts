@@ -146,6 +146,10 @@ export interface ChatMessage {
 
 export type AIScope =
   | "Vault Overview"
-  | "EA"
-  | "Compare"
-  | "Portfolio Draft";
+  | "Library Review"
+  | "Free EA Safety Review"
+  | "Paid EA Value Review"
+  | "Free vs Paid Comparison"
+  | "Portfolio Draft Review"
+  | "AI Workspace"
+  | "EA";

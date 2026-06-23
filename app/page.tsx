@@ -254,7 +254,7 @@ export default function DashboardPage() {
         <div className="scroll-area overflow-x-auto">
           <table className="w-full min-w-[640px] border-collapse text-sm">
             <thead>
-              <tr className="border-y border-line bg-surface-soft text-left text-[11px] font-semibold uppercase tracking-[0.05em] text-faint">
+              <tr className="border-y border-line bg-surface-soft text-left text-[12px] font-semibold uppercase tracking-[0.04em] text-faint">
                 <th className="px-6 py-3">EA Name</th>
                 <th className="px-3 py-3">Type</th>
                 <th className="px-3 py-3 text-right">Quality</th>

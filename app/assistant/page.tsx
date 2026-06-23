@@ -1,29 +1,40 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
+import { PageScope } from "@/components/shell/PageScope";
 import { Card } from "@/components/ui/Card";
 import { AIVerdictCard } from "@/components/ea/AIVerdictCard";
-import { IconAssistant, IconSend, IconSparkChat } from "@/components/ui/icons";
+import {
+  IconAssistant,
+  IconSend,
+  IconSparkChat,
+  IconDashboard,
+  IconFlask,
+  IconTag,
+  IconScale,
+  IconPortfolio,
+} from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { useFXPulse } from "@/context/FXPulseContext";
-import { SUGGESTED_QUESTIONS, getEAById } from "@/lib/mockData";
+import { SUGGESTED_QUESTIONS } from "@/lib/mockData";
 import type { AIScope } from "@/lib/types";
 
-const SCOPES: AIScope[] = ["Vault Overview", "EA", "Compare", "Portfolio Draft"];
+const CONTEXT_CARDS: Array<{
+  label: string;
+  scope: AIScope;
+  icon: (p: { size?: number }) => React.ReactNode;
+}> = [
+  { label: "Vault Overview", scope: "Vault Overview", icon: IconDashboard },
+  { label: "Free EA Analyst", scope: "Free EA Safety Review", icon: IconFlask },
+  { label: "Paid EA Analyst", scope: "Paid EA Value Review", icon: IconTag },
+  { label: "Free vs Paid", scope: "Free vs Paid Comparison", icon: IconScale },
+  { label: "Portfolio Review", scope: "Portfolio Draft Review", icon: IconPortfolio },
+];
 
 export default function AssistantPage() {
-  const {
-    messages,
-    sendMessage,
-    activeAIContext,
-    setAIContext,
-    selectedEAId,
-  } = useFXPulse();
+  const { messages, sendMessage, activeAIContext, setAIContext } = useFXPulse();
   const [text, setText] = useState("");
   const endRef = useRef<HTMLDivElement | null>(null);
-
-  const ea = getEAById(selectedEAId);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -37,81 +48,85 @@ export default function AssistantPage() {
   };
 
   return (
-    <div className="space-y-5">
-      <p className="max-w-2xl text-sm leading-relaxed text-muted">
-        Ask the assistant about your vault, a specific EA, a comparison, or your
-        portfolio draft. Answers are structured and risk-first — and are mock
-        analysis only, not financial advice.
-      </p>
+    <div className="space-y-6">
+      <PageScope scope="AI Workspace" />
+
+      {/* Inner section title */}
+      <div>
+        <h2 className="text-lg font-bold tracking-tight text-ink">AI Workspace</h2>
+        <p className="mt-0.5 max-w-2xl text-[13px] leading-relaxed text-muted">
+          Ask evidence-based questions about EA quality, hidden risk, paid value,
+          free safety and portfolio readiness. Mock analysis only — not financial
+          advice.
+        </p>
+      </div>
 
       {/* Context selector */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div
-          className="no-scrollbar inline-flex gap-1 overflow-x-auto rounded-xl border border-line bg-surface p-1"
-          role="group"
-          aria-label="Assistant context"
-        >
-          {SCOPES.map((s) => {
-            const active = activeAIContext === s;
-            const label = s === "EA" && ea ? `EA · ${ea.name}` : s;
+      <div>
+        <div className="eyebrow mb-2">Context</div>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+          {CONTEXT_CARDS.map((c) => {
+            const active = activeAIContext === c.scope;
+            const Icon = c.icon;
             return (
               <button
-                key={s}
+                key={c.scope}
                 type="button"
-                onClick={() => setAIContext(s)}
+                onClick={() => setAIContext(c.scope)}
                 aria-pressed={active}
                 className={cn(
-                  "shrink-0 rounded-lg px-3 py-1.5 text-[13px] font-semibold transition-colors",
+                  "flex flex-col items-start gap-2 rounded-card border p-3.5 text-left transition-colors",
                   active
-                    ? "bg-primary text-white"
-                    : "text-muted hover:bg-surface-soft hover:text-ink",
+                    ? "border-primary bg-primary-soft text-primary-dark shadow-card"
+                    : "border-line bg-surface text-muted hover:border-primary/40 hover:text-ink",
                 )}
               >
-                {label}
+                <span
+                  className={cn(
+                    "flex h-8 w-8 items-center justify-center rounded-lg",
+                    active ? "bg-primary text-white" : "bg-neutral-soft text-muted",
+                  )}
+                >
+                  <Icon size={16} />
+                </span>
+                <span className="text-[13px] font-semibold leading-tight text-ink">
+                  {c.label}
+                </span>
               </button>
             );
           })}
         </div>
-        {activeAIContext === "EA" && !ea ? (
-          <span className="text-[12.5px] text-muted">
-            No EA selected —{" "}
-            <Link href="/library" className="text-primary hover:underline">
-              pick one from the Library
-            </Link>
-            .
-          </span>
-        ) : null}
       </div>
 
       {/* Suggested questions */}
-      <div className="flex flex-wrap gap-2">
-        {SUGGESTED_QUESTIONS.map((q) => (
-          <button
-            key={q}
-            type="button"
-            onClick={() => sendMessage(q)}
-            className="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-3 py-1.5 text-[13px] font-medium text-ink transition-colors hover:border-primary hover:text-primary-dark"
-          >
-            <IconSparkChat size={14} className="text-primary" />
-            {q}
-          </button>
-        ))}
+      <div>
+        <div className="eyebrow mb-2">Suggested questions</div>
+        <div className="flex flex-wrap gap-2">
+          {SUGGESTED_QUESTIONS.map((q) => (
+            <button
+              key={q}
+              type="button"
+              onClick={() => sendMessage(q)}
+              className="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-3 py-1.5 text-[13px] font-medium text-ink transition-colors hover:border-primary hover:text-primary-dark"
+            >
+              <IconSparkChat size={14} className="text-primary" />
+              {q}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Conversation */}
-      <Card className="space-y-4" >
+      <Card>
         <ul className="space-y-4">
-          {messages.map((m) => {
-            if (m.role === "user") {
-              return (
-                <li key={m.id} className="flex justify-end">
-                  <div className="max-w-[80%] rounded-2xl rounded-br-md bg-ink px-4 py-2.5 text-sm text-white">
-                    {m.text}
-                  </div>
-                </li>
-              );
-            }
-            return (
+          {messages.map((m) =>
+            m.role === "user" ? (
+              <li key={m.id} className="flex justify-end">
+                <div className="max-w-[80%] rounded-2xl rounded-br-md bg-primary px-4 py-2.5 text-sm font-medium text-white">
+                  {m.text}
+                </div>
+              </li>
+            ) : (
               <li key={m.id} className="flex gap-2.5">
                 <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary text-white">
                   <IconAssistant size={15} />
@@ -126,8 +141,8 @@ export default function AssistantPage() {
                   )}
                 </div>
               </li>
-            );
-          })}
+            ),
+          )}
         </ul>
         <div ref={endRef} />
       </Card>
@@ -141,7 +156,7 @@ export default function AssistantPage() {
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Ask about risk, evidence, portfolio fit…"
+          placeholder="Ask about risk, evidence, paid value, free safety, portfolio fit…"
           aria-label="Message the AI assistant"
           className="h-11 flex-1 rounded-xl bg-transparent px-3 text-sm text-ink outline-none placeholder:text-faint"
         />

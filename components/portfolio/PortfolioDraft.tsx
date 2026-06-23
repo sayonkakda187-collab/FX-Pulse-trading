@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ea/StatusBadge";
+import { SourceBadge } from "@/components/ea/SourceBadge";
 import { AIVerdictCard } from "@/components/ea/AIVerdictCard";
 import { AllocationDonut, ALLOCATION_COLORS } from "./AllocationDonut";
 import {
@@ -16,6 +17,7 @@ import {
   IconPlus,
   IconShield,
   IconPortfolio,
+  IconSparkChat,
 } from "@/components/ui/icons";
 import { cn, formatPercent } from "@/lib/utils";
 import { useFXPulse } from "@/context/FXPulseContext";
@@ -198,11 +200,12 @@ export function PortfolioDraft() {
                         >
                           {ea.name}
                         </Link>
-                        <div className="mt-0.5 flex items-center gap-2">
+                        <div className="mt-1 flex flex-wrap items-center gap-1.5">
                           <StatusBadge status={ea.status} size="sm" />
+                          <SourceBadge source={ea.sourceType} size="sm" />
                           <span className="num text-[12px] text-muted">
-                            DD {formatPercent(ea.maxDrawdown)} · Q{" "}
-                            {ea.qualityScore}
+                            Q {ea.qualityScore} · V {ea.valueScore} · DD{" "}
+                            {formatPercent(ea.maxDrawdown)}
                           </span>
                         </div>
                       </div>
@@ -233,6 +236,15 @@ export function PortfolioDraft() {
                     aria-label={`${ea.name} allocation percentage`}
                     className="range-allocation mt-3"
                   />
+                  {ea.status === "Rejected" || ea.status === "Quarantine" ? (
+                    <div className="mt-2.5 flex items-start gap-1.5 rounded-lg border border-[#f6d3d3] bg-danger-soft px-2.5 py-1.5 text-[12px] text-danger">
+                      <IconAlert size={13} className="mt-0.5 shrink-0" />
+                      <span>
+                        {ea.status} EA — high hidden risk. Consider removing it
+                        from the draft.
+                      </span>
+                    </div>
+                  ) : null}
                 </li>
               );
             })}
@@ -282,7 +294,12 @@ export function PortfolioDraft() {
           </div>
         ) : null}
 
-        <SectionCard title="AI portfolio notes">
+        <SectionCard
+          title="AI Portfolio Notes"
+          icon={<IconSparkChat size={16} />}
+          description="Risk-first read on the current draft."
+          className="ring-1 ring-[#ddd6fe]"
+        >
           <AIVerdictCard
             verdict={{ title: "Portfolio review", ...portfolioVerdict(portfolioDraftEAIds) }}
             hideHeader
